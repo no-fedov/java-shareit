@@ -2,13 +2,11 @@ package ru.practicum.shareit.booking.model;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
-@RequiredArgsConstructor
 @Builder(toBuilder = true)
 public class Booking {
     private final int id;
@@ -20,6 +18,7 @@ public class Booking {
     private final int booker;
     @NotNull
     private Status status;
+
     public enum Status {
         WAITING,
         APPROVED,
