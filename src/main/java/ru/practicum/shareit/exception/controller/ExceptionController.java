@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.model.NotFoundEntityException;
-import ru.practicum.shareit.user.validation.EmailIsBusy;
+import ru.practicum.shareit.user.exception.validation.EmailIsBusy;
 
 import java.util.List;
 import java.util.Map;

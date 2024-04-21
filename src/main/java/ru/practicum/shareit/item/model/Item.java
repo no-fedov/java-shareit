@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.model;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,17 +10,15 @@ import javax.validation.constraints.NotNull;
 @Builder(toBuilder = true)
 public class Item {
     private final int id;
+    // приходит в заголовках http
+    private final int owner;
     @NotBlank
     private String name;
     @NotBlank
     private String description;
-    private boolean available;
-    private final int owner;
     @NotNull
-    private ItemRequest request;
+    private Boolean available;
 
-    public enum Status {
-        ACTIVE,
-        INACTIVE
-    }
+    // этот тут не нужно ???
+    //private ItemRequest request;
 }

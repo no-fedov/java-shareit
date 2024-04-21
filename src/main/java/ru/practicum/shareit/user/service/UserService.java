@@ -8,7 +8,7 @@ import ru.practicum.shareit.user.dao.UserDao;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.validation.EmailIsBusy;
+import ru.practicum.shareit.user.exception.validation.EmailIsBusy;
 
 import java.util.List;
 

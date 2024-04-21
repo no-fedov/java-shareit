@@ -21,32 +21,32 @@ public class UserDaoImp implements UserDao {
         int id = generateID();
         User newUser = user.toBuilder().id(id).build();
         userRepository.put(id, newUser);
-        log.info("UserDtoImp: add new user ({})", newUser);
+        log.info("UserDaoImp: add new user ({})", newUser);
         return newUser;
     }
 
     @Override
     public Optional<User> read(int id) {
-        log.info("UserDtoImp: find user with id = {}", id);
+        log.info("UserDaoImp: find user with id = {}", id);
         return Optional.ofNullable(userRepository.get(id));
     }
 
     @Override
     public User update(User user) {
-        log.info("UserDtoImp: user with id = {} updated ({})", user.getId(), user);
+        log.info("UserDaoImp: user with id = {} updated ({})", user.getId(), user);
         userRepository.put(user.getId(), user);
         return user;
     }
 
     @Override
     public User delete(int id) {
-        log.info("UserDtoImp: delete user with id = {}", id);
+        log.info("UserDaoImp: delete user with id = {}", id);
         return userRepository.remove(id);
     }
 
     @Override
     public List<User> getUsers() {
-        log.info("UserDtoImp: find all users");
+        log.info("UserDaoImp: find all users");
         return userRepository.values().stream().collect(Collectors.toUnmodifiableList());
     }
 
