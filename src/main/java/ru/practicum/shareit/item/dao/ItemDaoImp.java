@@ -45,12 +45,13 @@ public class ItemDaoImp implements ItemDao {
     @Override
     public Item delete(int id) {
         log.info("ItemDaoImp: delete user with id = {}", id);
+
         return itemRepository.remove(id);
     }
 
     @Override
     public Optional<Item> findUserItem(int ownerId, int itemId) {
-        //npe
+
         if (userItems.get(ownerId) == null) {
             throw new NotFoundEntityException("User not found");
         }

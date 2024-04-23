@@ -5,11 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.model.NotFoundEntityException;
 import ru.practicum.shareit.item.dao.ItemDao;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("itemServiceImp")
 @RequiredArgsConstructor
@@ -18,37 +21,46 @@ public class ItemServiceImp implements ItemService {
     private final ItemDao itemDao;
 
     @Override
-    public Item addItem(Item item) {
-        log.info("ItemServiceImp: User add new item ({})", item);
-        Item newItem = itemDao.create(item);
-        return newItem;
+    public ItemDto addItem(ItemCreateDto itemCreateDto) {
+        log.info("ItemServiceImp: User add new item ({})", itemCreateDto);
+        Item newItem = ItemMapper.mapToItemFromItemCreateDto(itemCreateDto);
+        Item addedItem = itemDao.create(newItem);
+        return ItemMapper.mapToItemDtoFromItem(addedItem);
     }
 
     @Override
-    public Item findItem(int id) {
+    public ItemDto findItem(int id) {
         log.info("ItemServiceImp: Request has been received to search for a item with an id = {}", id);
-        Item item = itemDao.read(id).orElseThrow(() -> new NotFoundEntityException("Item not found"));
+        Item item = getItemById(id);
         log.info("ItemServiceImp: found item ({})", item);
-        return item;
+        return ItemMapper.mapToItemDtoFromItem(item);
     }
 
     @Override
-    public Item updateItem(ItemUpdateDto itemUpdateDto) {
+    public ItemDto updateItem(ItemUpdateDto itemUpdateDto) {
         log.info("ItemServiceImp: updateItem itemID = {} where ownerID = {}", itemUpdateDto.getId(), itemUpdateDto.getOwner());
         Item item = itemDao.findUserItem(itemUpdateDto.getOwner(), itemUpdateDto.getId())
                 .orElseThrow(() -> new NotFoundEntityException(String.format("User with id = %s " +
                         "don't have item with = %s", itemUpdateDto.getOwner(), itemUpdateDto.getId())));
-        ItemMapper.updateItem(item, itemUpdateDto);
-        return item;
+        Item updatedItem = ItemMapper.mapToItemFromItemUpdateDto(item, itemUpdateDto);
+        return ItemMapper.mapToItemDtoFromItem(updatedItem);
     }
 
     @Override
-    public List<Item> getUserItems(int userID) {
-        return itemDao.getUserItems(userID);
+    public List<ItemDto> getUserItems(int userID) {
+        return itemDao.getUserItems(userID).stream()
+                .map(ItemMapper::mapToItemDtoFromItem)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public List<Item> getAvailableItemsByName(String text) {
-        return itemDao.getAvailableItemsByName(text);
+    public List<ItemDto> getAvailableItemsByName(String text) {
+        return itemDao.getAvailableItemsByName(text).stream()
+                .map(ItemMapper::mapToItemDtoFromItem)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private Item getItemById(int id) {
+        return itemDao.read(id).orElseThrow(() -> new NotFoundEntityException("Item not found"));
     }
 }
