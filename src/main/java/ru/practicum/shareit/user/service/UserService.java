@@ -2,69 +2,72 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.model.NotFoundEntityException;
-import ru.practicum.shareit.user.dao.UserDao;
+import ru.practicum.shareit.user.dao.UserRepository;
+import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
+import ru.practicum.shareit.user.exception.validation.EmailIsBusy;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.exception.validation.EmailIsBusy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final UserDao userDao;
 
-    public User addUser(User user) {
-        log.info("UserService: addUser {}", user);
+    private final UserRepository userRepository;
 
-        if (userDao.emailIsBusy(user.getEmail())) {
-            throw new EmailIsBusy("Email is busy");
-        }
-
-        return userDao.create(user);
+    public UserDto addUser(UserCreateDto userCreateDto) {
+        log.info("UserService: addUser {}", userCreateDto);
+        User user = UserMapper.mapToUserFromUserCreateDto(userCreateDto);
+        return saveUser(user);
     }
 
-    public User findUser(int id) {
+    public UserDto findUser(int id) {
         log.info("UserService: Request has been received to search for a user with an id = {}", id);
-        User user = userDao.read(id).orElseThrow(() -> new NotFoundEntityException("User not found"));
+        User user = getCurrentUserById(id);
         log.info("UserService: found user ({})", user);
+        return UserMapper.mapToUserDtoFromUser(user);
+    }
+
+    public UserDto updateUser(int id, UserUpdateDto userUpdateDto) {
+        log.info("UserService: update user with id = {}. Parameters for update: {}", id, userUpdateDto);
+        User user = getCurrentUserById(id);
+        User updatedUser = UserMapper.mapToUserFromUserUpdateDto(user, userUpdateDto);
+        return saveUser(updatedUser);
+    }
+
+    public UserDto deleteUser(int id) {
+        User deletedUser = getCurrentUserById(id);
+        userRepository.deleteById(id);
+        return UserMapper.mapToUserDtoFromUser(deletedUser);
+    }
+
+    public List<UserDto> getUsers() {
+        List<User> userList = userRepository.findAll();
+        return userList.stream()
+                .map(UserMapper::mapToUserDtoFromUser)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public User getCurrentUserById(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException("User not found"));
         return user;
     }
 
-    public User updateUser(int id, UserDto userDto) {
-        log.info("UserService: update user with id = {}. Parameters for update: {}", id, userDto);
-        User findUser = findUser(id);
-
-        emailIsBusy(findUser.getEmail(), userDto.getEmail());
-
-        log.info("The user has updated the email = {}", userDto.getEmail());
-        UserMapper.updateUserFromDto(findUser, userDto);
-
-        return userDao.update(findUser);
-    }
-
-    public User deleteUser(int id) {
-        findUser(id);
-        return userDao.delete(id);
-    }
-
-    public List<User> getUsers() {
-        return userDao.getUsers();
-    }
-
-    private void emailIsBusy(String emailUser, String emailUserDto) {
-        if (emailUserDto == null) {
-            return;
-        }
-        log.info("UserService: check email is busy");
-        if (!emailUser.equals(emailUserDto) && userDao.emailIsBusy(emailUserDto)) {
-            log.info("UserService: email = {} is busy", emailUserDto);
+    private UserDto saveUser(User user) {
+        try {
+            User newUser = userRepository.save(user);
+            return UserMapper.mapToUserDtoFromUser(newUser);
+        } catch (DataAccessException e) {
             throw new EmailIsBusy("It is not possible to update to this email it is busy");
         }
-        log.info("UserService: email is not busy");
     }
 }
