@@ -27,8 +27,7 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto findUser(@PathVariable int id) {
         log.info("UserController: Request for \"Find user by id\" id = {}", id);
-        return userService.
-                findUser(id);
+        return userService.findUser(id);
     }
 
     @PatchMapping(("/{id}"))
