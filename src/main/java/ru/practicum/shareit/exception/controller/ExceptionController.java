@@ -48,11 +48,13 @@ public class ExceptionController {
         log.warn("Тело запроса содержит невалидные данные: {}.", descriptionViolations);
         return Map.of("Тело запроса содержит некорректные данные", descriptionViolations);
     }
+
     @ExceptionHandler({UnsupportState.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionWrapper handleUnSupportState(final RuntimeException e) {
         return new ExceptionWrapper(e.getMessage());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, StackTraceElement[]> handleThrowableException(final Throwable e) {
