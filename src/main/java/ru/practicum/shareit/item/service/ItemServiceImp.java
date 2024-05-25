@@ -118,5 +118,4 @@ public class ItemServiceImp implements ItemService {
     private User getCurrentUser(int id) {
         return userService.getCurrentUserById(id);
     }
-
 }

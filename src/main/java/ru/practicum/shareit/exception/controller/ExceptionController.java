@@ -54,7 +54,7 @@ public class ExceptionController {
     public ExceptionWrapper handleUnSupportState(final RuntimeException e) {
         return new ExceptionWrapper(e.getMessage());
     }
-
+  
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, StackTraceElement[]> handleThrowableException(final Throwable e) {

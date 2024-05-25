@@ -77,5 +77,4 @@ public class ItemMapper {
                 .map(ItemMapper::mapToItemDtoFromItem)
                 .collect(Collectors.toUnmodifiableList());
     }
-
 }
