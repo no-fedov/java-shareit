@@ -7,7 +7,6 @@ import ru.practicum.shareit.booking.dao.BookingOwnerRepository;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.List;
 @Slf4j
 public class ItemController {
     private final ItemService itemService;
-    private final BookingOwnerRepository bookingOwnerRepository;
 
     @PostMapping
     public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
