@@ -8,7 +8,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.exception.UnsupportState;
 import ru.practicum.shareit.booking.service.BookingOwnerService;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
