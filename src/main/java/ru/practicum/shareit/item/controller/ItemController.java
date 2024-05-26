@@ -7,6 +7,7 @@ import ru.practicum.shareit.booking.dao.BookingOwnerRepository;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ItemController {
     private final BookingOwnerRepository bookingOwnerRepository;
 
     @PostMapping
-    public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") int ownerId,
+    public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
                            @Valid @RequestBody ItemCreateDto itemCreateDto) {
         itemCreateDto.setOwner(ownerId);
         ItemDto addedItem = itemService.addItem(itemCreateDto);
@@ -29,7 +30,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") int ownerId,
+    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
                               @RequestBody ItemUpdateDto itemUpdateDto,
                               @PathVariable int itemId) {
 
@@ -43,12 +44,12 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemPresentDto getItemById(@RequestHeader("X-Sharer-User-Id") int currentUserId, @PathVariable("itemId") int id) {
+    public ItemPresentDto getItemById(@RequestHeader("X-Sharer-User-Id") Integer currentUserId, @PathVariable("itemId") int id) {
         return itemService.findItem(currentUserId, id);
     }
 
     @GetMapping
-    public List<ItemPresentDto> getUserItems(@RequestHeader("X-Sharer-User-Id") int ownerId) {
+    public List<ItemPresentDto> getUserItems(@RequestHeader("X-Sharer-User-Id") Integer ownerId) {
         List<ItemPresentDto> userItems = itemService.getUserItems(ownerId);
         log.info("User items: {}", userItems);
         return userItems;
@@ -66,7 +67,7 @@ public class ItemController {
     }
 
     @PostMapping("{itemId}/comment")
-    public CommentDto postComment(@RequestHeader("X-Sharer-User-Id") int currentUser,
+    public CommentDto postComment(@RequestHeader("X-Sharer-User-Id") Integer currentUser,
                                   @PathVariable("itemId") int itemId,
                                   @RequestBody @Valid CommentCreateDto commentCreateDto) {
         commentCreateDto.setAuthorId(currentUser);

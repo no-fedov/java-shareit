@@ -68,7 +68,7 @@ public class ItemServiceImp implements ItemService {
     public ItemDto updateItem(ItemUpdateDto itemUpdateDto) {
         log.info("ItemServiceImp: updateItem itemID = {} where ownerID = {}", itemUpdateDto.getId(), itemUpdateDto.getOwner());
 
-        User currentUser = getCurrentUser(itemUpdateDto.getOwner());
+        getCurrentUser(itemUpdateDto.getOwner());
 
         Item item = itemRepository.findByIdAndOwnerId(itemUpdateDto.getId(), itemUpdateDto.getOwner())
                 .orElseThrow(() -> new NotFoundEntityException(String.format("User with id = %s " +

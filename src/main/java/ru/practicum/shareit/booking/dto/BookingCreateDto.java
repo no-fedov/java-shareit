@@ -10,11 +10,10 @@ import java.time.LocalDateTime;
 @Data
 public class BookingCreateDto {
 
-    @NotNull
     private int booker;
 
     @NotNull
-    private int itemId;
+    private Integer itemId;
 
     @NotNull
     private LocalDateTime start;

@@ -3,9 +3,11 @@ package ru.practicum.shareit.exception.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.shareit.booking.exception.*;
 import ru.practicum.shareit.exception.model.ExceptionWrapper;
 import ru.practicum.shareit.exception.model.NotFoundEntityException;
@@ -53,6 +55,18 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionWrapper handleUnSupportState(final RuntimeException e) {
         return new ExceptionWrapper(e.getMessage());
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionWrapper handleMissingRequestHeaderException(MissingRequestHeaderException exception) {
+        return new ExceptionWrapper(exception.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionWrapper handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+        return new ExceptionWrapper(exception.getMessage());
     }
 
     @ExceptionHandler

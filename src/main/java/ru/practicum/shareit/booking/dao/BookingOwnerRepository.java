@@ -20,16 +20,6 @@ public interface BookingOwnerRepository extends JpaRepository<Booking, Integer> 
 
     List<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(int ownerId, Status status);
 
-    @Query("SELECT b FROM Booking b " +
-            "WHERE b.booker.id = :bookerId " +
-            "AND b.item.id = :itemId " +
-            "AND b.status = :status " +
-            "AND b.start <= :time")
-    List<Booking> findByBookerIdAndItemIdAndStatusAndStartLessThan(@Param("bookerId") int bookerId,
-                                                                   @Param("itemId") int itemId,
-                                                                   @Param("status") Status status,
-                                                                   @Param("time") LocalDateTime time);
-
     @Query(value = "select bk.* " +
             "from bookings as bk left join items as it on bk.item_id = it.id " +
             "where bk.item_id = ?1 and " +

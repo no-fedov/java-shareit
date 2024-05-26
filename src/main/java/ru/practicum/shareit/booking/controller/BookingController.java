@@ -18,12 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class BookingController {
-    private final UserService userService;
     private final BookingService bookingService;
     private final BookingOwnerService bookingOwnerService;
 
     @PostMapping
-    public BookingDto addBooking(@RequestHeader("X-Sharer-User-Id") int booker,
+    public BookingDto addBooking(@RequestHeader("X-Sharer-User-Id") Integer booker,
                                  @RequestBody @Valid BookingCreateDto bookingCreateDto) {
         bookingCreateDto.valid();
         bookingCreateDto.setBooker(booker);
@@ -31,18 +30,18 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto makeBookingDecision(@RequestHeader("X-Sharer-User-Id") int ownerItemId,
+    public BookingDto makeBookingDecision(@RequestHeader("X-Sharer-User-Id") Integer ownerItemId,
                                           @PathVariable int bookingId, @RequestParam boolean approved) {
         return bookingOwnerService.makeBookingDecision(ownerItemId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDto findBooking(@RequestHeader("X-Sharer-User-Id") int userId, @PathVariable int bookingId) {
+    public BookingDto findBooking(@RequestHeader("X-Sharer-User-Id") Integer userId, @PathVariable int bookingId) {
         return bookingService.findBooking(bookingId, userId);
     }
 
     @GetMapping
-    public List<BookingDto> findBookingByCondition(@RequestHeader("X-Sharer-User-Id") int userId,
+    public List<BookingDto> findBookingByCondition(@RequestHeader("X-Sharer-User-Id") Integer userId,
                                                    @RequestParam(defaultValue = "ALL") String state) {
         try {
             StateParam stateParam = StateParam.valueOf(state);
@@ -53,7 +52,7 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> findBookingOwnerByCondition(@RequestHeader("X-Sharer-User-Id") int userId,
+    public List<BookingDto> findBookingOwnerByCondition(@RequestHeader("X-Sharer-User-Id") Integer userId,
                                                         @RequestParam(defaultValue = "ALL") String state) {
 
         try {
