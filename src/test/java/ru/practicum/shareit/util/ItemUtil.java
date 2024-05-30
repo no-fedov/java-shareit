@@ -27,7 +27,7 @@ public class ItemUtil {
         return Item.builder()
                 .id(3)
                 .name("Item3")
-                .owner(UserUtil.getUser1())
+                .owner(UserUtil.getUser3())
                 .description("Item3")
                 .available(true)
                 .build();

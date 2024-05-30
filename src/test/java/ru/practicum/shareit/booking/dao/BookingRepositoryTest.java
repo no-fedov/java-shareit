@@ -71,7 +71,6 @@ public class BookingRepositoryTest {
         List<Booking> bookings = bookingRepository.saveAll(List.of(booking1, booking2));
 
         //when
-
         List<Booking> obtainedBookings = bookingRepository.findByBookerIdOrderByStartDesc(booker.getId());
 
         //then
