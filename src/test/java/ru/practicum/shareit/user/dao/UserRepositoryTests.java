@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.util.CollectionUtils;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.util.UserUtil;
@@ -16,14 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
+@Sql(scripts = "/schema-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class UserRepositoryTests {
     @Autowired
     private UserRepository userRepository;
-
-    @BeforeEach
-    public void setUp() {
-        userRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("Test save user functionality")

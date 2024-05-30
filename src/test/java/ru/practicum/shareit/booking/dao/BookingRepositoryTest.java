@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking.dao;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.util.CollectionUtils;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
@@ -18,6 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Sql(scripts = "/schema-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BookingRepositoryTest {
     @Autowired
@@ -29,7 +31,7 @@ public class BookingRepositoryTest {
     @Autowired
     private ItemRepository itemRepository;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         userRepository.saveAll(List.of(UserUtil.getUser1(),
                 UserUtil.getUser2(),
@@ -38,11 +40,6 @@ public class BookingRepositoryTest {
         itemRepository.saveAll(List.of(ItemUtil.getItem1_WhereOwnerUser1(),
                 ItemUtil.getItem2_WhereOwnerUser2(),
                 ItemUtil.getItem3_WhereOwnerUser3()));
-    }
-
-    @BeforeEach
-    public void clearBooking() {
-        bookingRepository.deleteAll();
     }
 
     @Test
