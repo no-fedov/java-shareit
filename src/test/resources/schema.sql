@@ -44,3 +44,8 @@ create TABLE IF NOT EXISTS comments (
     CONSTRAINT fk_booker_id FOREIGN KEY (author_id) REFERENCES users (id)
 );
 
+TRUNCATE TABLE comments;
+TRUNCATE TABLE bookings;
+TRUNCATE TABLE items;
+TRUNCATE TABLE users;
+

@@ -86,7 +86,7 @@ public class ItemServiceImp implements ItemService {
 
     @Override
     public List<ItemDto> getAvailableItemsByName(String text) {
-        List<Item> items = itemRepository.findByNameOrDescriptionContainingAllIgnoreCaseAndAvailable(text, text, true);
+        List<Item> items = itemRepository.findByNameOrDescription(text,true);
         return ItemMapper.mapToListItemDtoFromListItem(items);
     }
 

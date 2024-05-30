@@ -88,7 +88,7 @@ public class BookingServiceImpl implements BookingService {
                 return BookingMapper.mapToListBookingDtoFromListBooking(rejectedBookings);
 
             case CURRENT:
-                List<Booking> currentBooking = bookingRepository.findCurrentBooking(LocalDateTime.now());
+                List<Booking> currentBooking = bookingRepository.findCurrentBooking(LocalDateTime.now(), userId);
                 return BookingMapper.mapToListBookingDtoFromListBooking(currentBooking);
         }
 

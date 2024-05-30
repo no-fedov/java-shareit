@@ -32,7 +32,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query(value = "select bk.* " +
             "from bookings as bk left join items as it on bk.item_id = it.id " +
-            "where bk.start_date < ?1 and bk.end_date > ?1 order by bk.id asc ", nativeQuery = true)
-    List<Booking> findCurrentBooking(LocalDateTime date);
+            "where bk.start_date < ?1 and bk.end_date > ?1 " +
+            "and bk.booker_id = ?2 " +
+            "order by bk.id asc ", nativeQuery = true)
+    List<Booking> findCurrentBooking(LocalDateTime date, int bookerId);
 
 }
