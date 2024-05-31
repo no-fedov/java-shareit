@@ -292,8 +292,5 @@ public class BookingServiceImplTests {
 
         //then
         assertThat(CollectionUtils.isEmpty(returnedBookings)).isFalse();
-
     }
-
-
 }
