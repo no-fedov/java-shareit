@@ -2,6 +2,9 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingOwnerRepository;
 import ru.practicum.shareit.booking.dao.BookingRepository;
@@ -90,13 +93,14 @@ public class ItemServiceImp implements ItemService {
     }
 
     @Override
-    public List<ItemPresentDto> getUserItems(int userID) {
-        return itemOwnerService.getUserItems(userID);
+    public List<ItemPresentDto> getUserItems(int userID, Pageable page) {
+
+        return itemOwnerService.getUserItems(userID, page);
     }
 
     @Override
-    public List<ItemDto> getAvailableItemsByName(String text) {
-        List<Item> items = itemRepository.findByNameOrDescription(text, true);
+    public List<ItemDto> getAvailableItemsByName(String text, Pageable page) {
+        List<Item> items = itemRepository.findByNameOrDescription(text, true, page).getContent();
         return ItemMapper.mapToListItemDtoFromListItem(items);
     }
 

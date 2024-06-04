@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.service.BookingOwnerService;
@@ -26,8 +28,9 @@ public class ItemOwnerServiceImp implements ItemOwnerService {
     private final BookingOwnerService bookingOwnerService;
 
     @Override
-    public List<ItemPresentDto> getUserItems(int userID) {
-        List<Item> items = itemRepository.findByOwnerIdOrderByIdAsc(userID);
+    public List<ItemPresentDto> getUserItems(int userID, Pageable page) {
+
+        List<Item> items = itemRepository.findByOwnerIdOrderByIdAsc(userID, page).getContent();
 
         List<ItemPresentDto> itemOwnerDtoList = new ArrayList<>();
         for (Item item : items) {
