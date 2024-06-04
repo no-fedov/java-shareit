@@ -2,8 +2,10 @@ package ru.practicum.shareit.item.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import ru.practicum.shareit.item.dto.ItemPresentForRequestDto;
 import ru.practicum.shareit.item.model.Item;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +20,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "AND i.available =:condition")
     List<Item> findByNameOrDescription(String text, boolean condition);
 
+    @Query("SELECT new ru.practicum.shareit.item.dto.ItemPresentForRequestDto(i.id, i.description, r.id , i.available) " +
+            "FROM Item i " +
+            "JOIN i.request r " +
+            "WHERE r.id IN :requestId")
+    List<ItemPresentForRequestDto> findItemsByRequestIds(Collection<Integer> requestId);
 }

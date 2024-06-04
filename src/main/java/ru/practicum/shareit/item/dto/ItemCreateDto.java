@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,4 +17,5 @@ public class ItemCreateDto {
     private String description;
     @NotNull
     private Boolean available;
+    private Integer requestId;
 }

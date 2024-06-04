@@ -19,4 +19,6 @@ public interface ItemService {
     Item getItemById(int id);
 
     CommentDto postComment(CommentCreateDto commentCreateDto);
+
+    List<ItemPresentForRequestDto> getItemsByRequestId(int id);
 }

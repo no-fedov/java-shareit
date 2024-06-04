@@ -20,7 +20,9 @@ public class ItemController {
     @PostMapping
     public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
                            @Valid @RequestBody ItemCreateDto itemCreateDto) {
+
         itemCreateDto.setOwner(ownerId);
+
         ItemDto addedItem = itemService.addItem(itemCreateDto);
         log.info("Item added: {}", addedItem);
         return addedItem;

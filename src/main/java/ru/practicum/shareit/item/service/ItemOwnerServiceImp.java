@@ -8,11 +8,13 @@ import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemPresentDto;
+import ru.practicum.shareit.item.dto.ItemPresentForRequestDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -39,5 +41,10 @@ public class ItemOwnerServiceImp implements ItemOwnerService {
         }
 
         return itemOwnerDtoList;
+    }
+
+    @Override
+    public List<ItemPresentForRequestDto> getItemsByRequestIds(Collection<Integer> requestId) {
+        return itemRepository.findItemsByRequestIds(requestId);
     }
 }
