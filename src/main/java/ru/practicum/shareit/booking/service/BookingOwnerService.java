@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
+import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.controller.StateParam;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
@@ -13,6 +14,6 @@ public interface BookingOwnerService {
 
     BookingDto findNextBooking(int itemId, LocalDateTime date);
 
-    List<BookingDto> findBookingByCondition(int userId, StateParam stateParam);
+    List<BookingDto> findBookingByCondition(int userId, StateParam stateParam, Pageable page);
 
 }

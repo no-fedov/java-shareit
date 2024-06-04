@@ -120,7 +120,7 @@ public class ItemServiceImp implements ItemService {
         Item currentItem = getItemById(currentItemId);
 
         if (bookingRepository.findByBookerIdAndItemIdAndStatusAndStartLessThan(currentUserId, currentItemId,
-                Status.APPROVED, LocalDateTime.now()).isEmpty()) {
+                Status.APPROVED, LocalDateTime.now(), Pageable.unpaged()).isEmpty()) {
             throw new CommentException("Нельзя оставить комментарий когда вы не бронировали вещь");
         }
 
