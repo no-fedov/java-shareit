@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
-    List<Request> findAllByRequesterOrderByCreatedDesc(int requesterId);
-    Page<Request> findByRequesterNot(int userId, Pageable page);
+    List<Request> findByRequesterIdOrderByCreatedDesc(int requesterId);
+    List<Request> findByRequesterIdNot(int userId, Pageable page);
 
 }

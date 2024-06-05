@@ -3,6 +3,7 @@ package ru.practicum.shareit.request.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.model.NotFoundEntityException;
 import ru.practicum.shareit.item.dto.ItemPresentForRequestDto;
@@ -52,7 +53,11 @@ public class RequestServiceImpl implements RequestService {
 
         getCurrentUser(userId);
 
-        List<Request> requests = requestRepository.findAllByRequesterOrderByCreatedDesc(userId);
+        List<Request> requests = requestRepository.findByRequesterIdOrderByCreatedDesc(userId);
+
+        if (requests == null || requests.isEmpty()) {
+            return List.of();
+        }
 
         List<Integer> requestIds = requests.stream().map(Request::getId).collect(Collectors.toList());
 
@@ -72,18 +77,17 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<RequestDtoWithItems> getPageRequest(int userId, int from, int size) {
+    public List<RequestDtoWithItems> getPageRequest(int userId, Pageable page) {
         userService.getCurrentUserById(userId);
 
-        PageRequest page = PageRequest.of(from,size);
-        Page<Request> pageRequest = requestRepository.findByRequesterNot(userId, page);
+        List<Request> pageRequest = requestRepository.findByRequesterIdNot(userId, page);
         List<Integer> requestIds = pageRequest.stream().map(Request::getId).collect(Collectors.toList());
         List<ItemPresentForRequestDto> ipfr = itemOwnerService.getItemsByRequestIds(requestIds);
 
         Map<Integer, List<ItemPresentForRequestDto>> items = ipfr.stream()
                 .collect(Collectors.groupingBy(ItemPresentForRequestDto::getRequestId));
 
-        return RequestMapper.mapToRequestDtoWithItemsFromRequest(pageRequest.getContent(), items);
+        return RequestMapper.mapToRequestDtoWithItemsFromRequest(pageRequest, items);
     }
 
     private User getCurrentUser(int userId) {

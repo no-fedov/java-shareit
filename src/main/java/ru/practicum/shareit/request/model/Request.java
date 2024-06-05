@@ -21,7 +21,7 @@ public class Request {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "requester")
     private User requester;
 
