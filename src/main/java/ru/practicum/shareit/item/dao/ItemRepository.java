@@ -22,7 +22,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "AND i.available =:condition")
     Page<Item> findByNameOrDescription(String text, boolean condition, Pageable page);
 
-    @Query("SELECT new ru.practicum.shareit.item.dto.ItemPresentForRequestDto(i.id, i.description, r.id , i.available) " +
+    @Query("SELECT new ru.practicum.shareit.item.dto.ItemPresentForRequestDto(i.id, i.description, r.id , i.available, i.name) " +
             "FROM Item i " +
             "JOIN i.request r " +
             "WHERE r.id IN :requestId")

@@ -58,6 +58,7 @@ public class ItemMapper {
                 .name(item.getName())
                 .available(item.getAvailable())
                 .description(item.getDescription())
+                .requestId(item.getRequest() == null ? 0 : item.getRequest().getId())
                 .build();
     }
 

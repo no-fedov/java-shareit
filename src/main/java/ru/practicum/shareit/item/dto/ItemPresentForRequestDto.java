@@ -12,4 +12,5 @@ public class ItemPresentForRequestDto {
     private String description;
     private int requestId;
     private boolean available;
+    private String name;
 }
