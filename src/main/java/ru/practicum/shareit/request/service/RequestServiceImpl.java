@@ -1,8 +1,6 @@
 package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.model.NotFoundEntityException;
@@ -73,7 +71,7 @@ public class RequestServiceImpl implements RequestService {
     public RequestDtoWithItems getRequestById(int id) {
         Request request = getCurrentRequest(id);
         var items = itemService.getItemsByRequestId(id);
-        return RequestMapper.mapToRequestDtoWithItemsFromRequest(request,items);
+        return RequestMapper.mapToRequestDtoWithItemsFromRequest(request, items);
     }
 
     @Override
