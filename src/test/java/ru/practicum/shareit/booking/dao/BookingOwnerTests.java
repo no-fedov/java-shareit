@@ -181,7 +181,7 @@ public class BookingOwnerTests {
                 .end(end.plusDays(2))
                 .build();
 
-        bookingOwnerRepository.saveAll(List.of(booking1,booking2));
+        bookingOwnerRepository.saveAll(List.of(booking1, booking2));
 
         //when
         Booking booking = bookingOwnerRepository.findPreviousBooking(ItemUtil.getItem2_WhereOwnerUser2().getId(), end.plusDays(3));
@@ -216,7 +216,7 @@ public class BookingOwnerTests {
                 .end(end.plusDays(2))
                 .build();
 
-        bookingOwnerRepository.saveAll(List.of(booking1,booking2));
+        bookingOwnerRepository.saveAll(List.of(booking1, booking2));
 
         //when
         Booking booking = bookingOwnerRepository.findNextBooking(ItemUtil.getItem2_WhereOwnerUser2().getId(), end);
@@ -230,7 +230,7 @@ public class BookingOwnerTests {
     @DisplayName("Test give current bookings")
     public void givenTwoBookingsOfOneItem_whenGetNextBooking_thenReturnCurrentTwoBooking() {
         //given
-        LocalDateTime start = LocalDateTime.of(2023, 12, 1,1,1);
+        LocalDateTime start = LocalDateTime.of(2023, 12, 1, 1, 1);
         LocalDateTime end = start.plusDays(2);
 
         User booker = UserUtil.getUser1();
@@ -252,7 +252,7 @@ public class BookingOwnerTests {
                 .end(end.plusDays(2))
                 .build();
 
-        bookingOwnerRepository.saveAll(List.of(booking1,booking2));
+        bookingOwnerRepository.saveAll(List.of(booking1, booking2));
 
         //when
         List<Booking> bookings = bookingOwnerRepository.findCurrentBooking(owner.getId(), start, Pageable.unpaged());

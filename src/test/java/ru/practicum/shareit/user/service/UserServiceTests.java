@@ -181,7 +181,7 @@ public class UserServiceTests {
                 .thenThrow(new SQLWarningException(null, null));
 
         //when
-        EmailIsBusy exception = assertThrows(EmailIsBusy.class, ()-> userService.updateUser(userId,userUpdateDto));
+        EmailIsBusy exception = assertThrows(EmailIsBusy.class, () -> userService.updateUser(userId, userUpdateDto));
 
         //then
         assertThat(exception.getMessage()).isEqualTo("It is not possible to update to this email it is busy");
