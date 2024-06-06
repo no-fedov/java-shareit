@@ -30,7 +30,7 @@ public class ItemOwnerServiceImp implements ItemOwnerService {
     @Override
     public List<ItemPresentDto> getUserItems(int userID, Pageable page) {
 
-        List<Item> items = itemRepository.findByOwnerIdOrderByIdAsc(userID, page).getContent();
+        List<Item> items = itemRepository.findByOwnerIdOrderByIdAsc(userID, page);
 
         List<ItemPresentDto> itemOwnerDtoList = new ArrayList<>();
         for (Item item : items) {

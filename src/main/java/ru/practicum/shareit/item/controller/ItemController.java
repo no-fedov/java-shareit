@@ -54,7 +54,7 @@ public class ItemController {
 
     @GetMapping
     public List<ItemPresentDto> getUserItems(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
-                                             @Min(1) @RequestParam(value = "from", required = false) Integer from,
+                                             @Min(0) @RequestParam(value = "from", required = false) Integer from,
                                              @Min(1) @RequestParam(value = "size", required = false) Integer size) {
         Pageable page = getPage(from, size);
         List<ItemPresentDto> userItems = itemService.getUserItems(ownerId, page);
@@ -64,7 +64,7 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<ItemDto> getAvailableItemsByName(@RequestParam String text,
-                                                 @Min(1) @RequestParam(value = "from", required = false) Integer from,
+                                                 @Min(0) @RequestParam(value = "from", required = false) Integer from,
                                                  @Min(1) @RequestParam(value = "size", required = false) Integer size) {
 
         if (text == null || text.isBlank()) {

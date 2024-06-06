@@ -47,7 +47,7 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> findBookingByCondition(@RequestHeader("X-Sharer-User-Id") Integer userId,
                                                    @RequestParam(defaultValue = "ALL") String state,
-                                                   @Min(1) @RequestParam(value = "from", required = false) Integer from,
+                                                   @Min(0) @RequestParam(value = "from", required = false) Integer from,
                                                    @Min(1) @RequestParam(value = "size", required = false) Integer size) {
         Pageable page = getPage(from, size);
         try {
@@ -61,7 +61,7 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> findBookingOwnerByCondition(@RequestHeader("X-Sharer-User-Id") Integer userId,
                                                         @RequestParam(defaultValue = "ALL") String state,
-                                                        @Min(1) @RequestParam(value = "from", required = false) Integer from,
+                                                        @Min(0) @RequestParam(value = "from", required = false) Integer from,
                                                         @Min(1) @RequestParam(value = "size", required = false) Integer size) {
 
         Pageable page = getPage(from, size);

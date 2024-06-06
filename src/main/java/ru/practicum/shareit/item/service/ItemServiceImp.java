@@ -100,7 +100,7 @@ public class ItemServiceImp implements ItemService {
 
     @Override
     public List<ItemDto> getAvailableItemsByName(String text, Pageable page) {
-        List<Item> items = itemRepository.findByNameOrDescription(text, true, page).getContent();
+        List<Item> items = itemRepository.findByNameOrDescription(text, true, page);
         return ItemMapper.mapToListItemDtoFromListItem(items);
     }
 

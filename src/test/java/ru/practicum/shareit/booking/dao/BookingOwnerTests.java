@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.util.CollectionUtils;
 import ru.practicum.shareit.booking.model.Booking;
@@ -66,7 +67,7 @@ public class BookingOwnerTests {
         Booking obtainedBooking = bookingOwnerRepository.save(booking1);
 
         //then
-        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdOrderByStartDesc(ownerItem.getId());
+        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdOrderByStartDesc(ownerItem.getId(), Pageable.unpaged());
         assertThat(bookings.size()).isEqualTo(1);
         assertThat(bookings.get(0)).isEqualTo(booking1);
     }
@@ -94,7 +95,7 @@ public class BookingOwnerTests {
         Booking obtainedBooking = bookingOwnerRepository.save(booking1);
 
         //then
-        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdAndEndLessThanOrderByStartDesc(ownerItem.getId(), end.plusDays(1));
+        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdAndEndLessThanOrderByStartDesc(ownerItem.getId(), end.plusDays(1), Pageable.unpaged());
         assertThat(bookings.size()).isEqualTo(1);
         assertThat(bookings.get(0)).isEqualTo(booking1);
     }
@@ -122,7 +123,7 @@ public class BookingOwnerTests {
         Booking obtainedBooking = bookingOwnerRepository.save(booking1);
 
         //then
-        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdAndStartGreaterThanOrderByStartDesc(ownerItem.getId(), start.minusDays(1));
+        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdAndStartGreaterThanOrderByStartDesc(ownerItem.getId(), start.minusDays(1), Pageable.unpaged());
         assertThat(bookings.size()).isEqualTo(1);
         assertThat(bookings.get(0)).isEqualTo(booking1);
     }
@@ -150,7 +151,7 @@ public class BookingOwnerTests {
         Booking obtainedBooking = bookingOwnerRepository.save(booking1);
 
         //then
-        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(ownerItem.getId(), Status.WAITING);
+        List<Booking> bookings = bookingOwnerRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(ownerItem.getId(), Status.WAITING, Pageable.unpaged());
         assertThat(bookings.size()).isEqualTo(1);
         assertThat(bookings.get(0)).isEqualTo(booking1);
     }
@@ -254,7 +255,7 @@ public class BookingOwnerTests {
         bookingOwnerRepository.saveAll(List.of(booking1,booking2));
 
         //when
-        List<Booking> bookings = bookingOwnerRepository.findCurrentBooking(owner.getId(), start);
+        List<Booking> bookings = bookingOwnerRepository.findCurrentBooking(owner.getId(), start, Pageable.unpaged());
 
         //then
         assertThat(CollectionUtils.isEmpty(bookings)).isFalse();
