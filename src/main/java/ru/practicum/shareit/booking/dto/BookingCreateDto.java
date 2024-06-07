@@ -26,8 +26,9 @@ public class BookingCreateDto {
     private Status status = Status.WAITING;
 
     public void valid() {
-        if (start.isEqual(end) || end.isBefore(start) || end.isBefore(LocalDateTime.now())
-                || start.isBefore(LocalDateTime.now())) {
+        LocalDateTime now = LocalDateTime.now();
+        if (start.isEqual(end) || end.isBefore(start) || end.isBefore(now)
+                || start.isBefore(now)) {
             throw new NoValidTime("Неверно указаны даты бронирования");
         }
     }
