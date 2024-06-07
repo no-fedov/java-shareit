@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.annotation.DirtiesContext;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemOwnerService;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.dao.RequestRepository;
