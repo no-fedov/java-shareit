@@ -183,7 +183,6 @@ public class BookingControllerTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(new ExceptionWrapper("Unknown state: "+ state))));
+                .andExpect(content().json(objectMapper.writeValueAsString(new ExceptionWrapper("Unknown state: " + state))));
     }
 }
-
