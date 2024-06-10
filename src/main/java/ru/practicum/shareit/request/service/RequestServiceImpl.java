@@ -16,7 +16,6 @@ import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,11 +34,7 @@ public class RequestServiceImpl implements RequestService {
 
         User currentUser = getCurrentUser(requestCreateDto.getRequester());
 
-        Request newRequest = Request.builder()
-                .requester(currentUser)
-                .description(requestCreateDto.getDescription())
-                .created(LocalDateTime.now())
-                .build();
+        Request newRequest = RequestMapper.mapToRequestFromRequestCreateDto(requestCreateDto, currentUser);
 
         Request savedRequest = requestRepository.save(newRequest);
 
@@ -87,7 +82,6 @@ public class RequestServiceImpl implements RequestService {
         if (requests == null || requests.isEmpty()) {
             return List.of();
         }
-
 
         List<Integer> requestIds = requests.stream().map(Request::getId).collect(Collectors.toList());
 

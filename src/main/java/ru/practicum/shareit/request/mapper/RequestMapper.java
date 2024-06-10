@@ -3,10 +3,13 @@ package ru.practicum.shareit.request.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemPresentForRequestDto;
+import ru.practicum.shareit.request.dto.RequestCreateDto;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.dto.RequestDtoWithItems;
 import ru.practicum.shareit.request.model.Request;
+import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,5 +54,13 @@ public class RequestMapper {
         }
 
         return r;
+    }
+
+    public static Request mapToRequestFromRequestCreateDto(RequestCreateDto requestCreateDto, User user) {
+        return Request.builder()
+                .requester(user)
+                .description(requestCreateDto.getDescription())
+                .created(LocalDateTime.now())
+                .build();
     }
 }
