@@ -67,32 +67,36 @@ public class BookingServiceImpl implements BookingService {
 
         getCurrentUser(userId);
 
-        List<Booking> bookings;
-
         switch (state) {
             case ALL:
-                bookings = bookingRepository.findByBookerIdOrderByStartDesc(userId, page);
-                return BookingMapper.mapToListBookingDtoFromListBooking(bookings);
+                return BookingMapper.mapToListBookingDtoFromListBooking(
+                        bookingRepository.findByBookerIdOrderByStartDesc(userId, page)
+                );
 
             case PAST:
-                bookings = bookingRepository.findByBookerIdAndEndLessThanOrderByStartDesc(userId, LocalDateTime.now(), page);
-                return BookingMapper.mapToListBookingDtoFromListBooking(bookings);
+                return BookingMapper.mapToListBookingDtoFromListBooking(
+                        bookingRepository.findByBookerIdAndEndLessThanOrderByStartDesc(userId, LocalDateTime.now(), page)
+                );
 
             case FUTURE:
-                bookings = bookingRepository.findByBookerIdAndStartGreaterThanOrderByStartDesc(userId, LocalDateTime.now(), page);
-                return BookingMapper.mapToListBookingDtoFromListBooking(bookings);
+                return BookingMapper.mapToListBookingDtoFromListBooking(
+                        bookingRepository.findByBookerIdAndStartGreaterThanOrderByStartDesc(userId, LocalDateTime.now(), page)
+                );
 
             case WAITING:
-                bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
-                return BookingMapper.mapToListBookingDtoFromListBooking(bookings);
+                return BookingMapper.mapToListBookingDtoFromListBooking(
+                        bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page)
+                );
 
             case REJECTED:
-                bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
-                return BookingMapper.mapToListBookingDtoFromListBooking(bookings);
+                return BookingMapper.mapToListBookingDtoFromListBooking(
+                        bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page)
+                );
 
             case CURRENT:
-                bookings = bookingRepository.findCurrentBooking(LocalDateTime.now(), userId, page);
-                return BookingMapper.mapToListBookingDtoFromListBooking(bookings);
+                return BookingMapper.mapToListBookingDtoFromListBooking(
+                        bookingRepository.findCurrentBooking(LocalDateTime.now(), userId, page)
+                );
         }
 
         return List.of();
