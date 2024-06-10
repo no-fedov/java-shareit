@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static ru.practicum.shareit.util.Page.getPage;
 
 @Validated
 @RestController
@@ -85,13 +86,5 @@ public class ItemController {
         commentCreateDto.setCreated(LocalDateTime.now());
 
         return itemService.postComment(commentCreateDto);
-    }
-
-    private Pageable getPage(Integer from, Integer size) {
-        Pageable page = Pageable.unpaged();
-        if (from != null && size != null) {
-            page = PageRequest.of(from / size, size);
-        }
-        return page;
     }
 }

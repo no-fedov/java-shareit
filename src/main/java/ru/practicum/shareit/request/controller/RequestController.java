@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +13,8 @@ import ru.practicum.shareit.user.service.UserService;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
+
+import static ru.practicum.shareit.util.Page.getPage;
 
 /**
  * TODO Sprint add-item-requests.
@@ -54,13 +55,5 @@ public class RequestController {
         Pageable page = getPage(from, size);
 
         return requestService.getPageRequest(currentUserId, page);
-    }
-
-    private Pageable getPage(Integer from, Integer size) {
-        Pageable page = Pageable.unpaged();
-        if (from != null && size != null) {
-            page = PageRequest.of(from / size, size);
-        }
-        return page;
     }
 }
