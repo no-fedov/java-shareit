@@ -1,11 +1,13 @@
 package ru.practicum.shareit.item.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
+@Builder(toBuilder = true)
 public class ItemCreateDto {
     private int owner;
     @NotBlank
@@ -14,4 +16,5 @@ public class ItemCreateDto {
     private String description;
     @NotNull
     private Boolean available;
+    private Integer requestId;
 }

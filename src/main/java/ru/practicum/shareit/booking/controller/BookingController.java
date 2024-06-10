@@ -2,20 +2,25 @@ package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.exception.UnsupportState;
 import ru.practicum.shareit.booking.service.BookingOwnerService;
 import ru.practicum.shareit.booking.service.BookingService;
-
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
+
+import static ru.practicum.shareit.util.Page.getPage;
 
 @RestController
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class BookingController {
     private final BookingService bookingService;
     private final BookingOwnerService bookingOwnerService;
@@ -41,10 +46,13 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> findBookingByCondition(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                                                   @RequestParam(defaultValue = "ALL") String state) {
+                                                   @RequestParam(defaultValue = "ALL") String state,
+                                                   @Min(0) @RequestParam(value = "from", required = false) Integer from,
+                                                   @Min(1) @RequestParam(value = "size", required = false) Integer size) {
+        Pageable page = getPage(from, size);
         try {
             StateParam stateParam = StateParam.valueOf(state);
-            return bookingService.findBookingByCondition(userId, stateParam);
+            return bookingService.findBookingByCondition(userId, stateParam, page);
         } catch (IllegalArgumentException e) {
             throw new UnsupportState("Unknown state: " + state);
         }
@@ -52,11 +60,14 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingDto> findBookingOwnerByCondition(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                                                        @RequestParam(defaultValue = "ALL") String state) {
+                                                        @RequestParam(defaultValue = "ALL") String state,
+                                                        @Min(0) @RequestParam(value = "from", required = false) Integer from,
+                                                        @Min(1) @RequestParam(value = "size", required = false) Integer size) {
 
+        Pageable page = getPage(from, size);
         try {
             StateParam stateParam = StateParam.valueOf(state);
-            return bookingOwnerService.findBookingByCondition(userId, stateParam);
+            return bookingOwnerService.findBookingByCondition(userId, stateParam, page);
         } catch (IllegalArgumentException e) {
             throw new UnsupportState("Unknown state: " + state);
         }

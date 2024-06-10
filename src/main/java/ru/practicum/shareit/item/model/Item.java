@@ -1,9 +1,7 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -28,18 +26,13 @@ public class Item {
     @Column(name = "available")
     private Boolean available;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", available=" + available +
-                ", owner=" + owner.getId() +
-                '}';
-    }
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    private Request request;
 }

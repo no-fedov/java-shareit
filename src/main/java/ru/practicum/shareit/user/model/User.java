@@ -1,9 +1,6 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 
 import javax.persistence.*;
@@ -28,15 +25,8 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     List<Item> items = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }

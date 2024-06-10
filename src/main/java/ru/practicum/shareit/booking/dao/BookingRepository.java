@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.dao;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,13 +13,13 @@ import java.util.List;
 
 @Repository("bookingRepository")
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
-    List<Booking> findByBookerIdOrderByStartDesc(int bookerId);
+    List<Booking> findByBookerIdOrderByStartDesc(int bookerId, Pageable page);
 
-    List<Booking> findByBookerIdAndEndLessThanOrderByStartDesc(int bookerId, LocalDateTime endDate);
+    List<Booking> findByBookerIdAndEndLessThanOrderByStartDesc(int bookerId, LocalDateTime endDate, Pageable page);
 
-    List<Booking> findByBookerIdAndStartGreaterThanOrderByStartDesc(int bookerId, LocalDateTime startDate);
+    List<Booking> findByBookerIdAndStartGreaterThanOrderByStartDesc(int bookerId, LocalDateTime startDate, Pageable page);
 
-    List<Booking> findByBookerIdAndStatusOrderByStartDesc(int bookerId, Status status);
+    List<Booking> findByBookerIdAndStatusOrderByStartDesc(int bookerId, Status status, Pageable page);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.booker.id = :bookerId " +
@@ -28,11 +29,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findByBookerIdAndItemIdAndStatusAndStartLessThan(@Param("bookerId") int bookerId,
                                                                    @Param("itemId") int itemId,
                                                                    @Param("status") Status status,
-                                                                   @Param("time") LocalDateTime time);
+                                                                   @Param("time") LocalDateTime time,
+                                                                   Pageable page);
 
     @Query(value = "select bk.* " +
             "from bookings as bk left join items as it on bk.item_id = it.id " +
-            "where bk.start_date < ?1 and bk.end_date > ?1 order by bk.id asc ", nativeQuery = true)
-    List<Booking> findCurrentBooking(LocalDateTime date);
+            "where bk.start_date < ?1 and bk.end_date > ?1 " +
+            "and bk.booker_id = ?2 " +
+            "order by bk.id asc ", nativeQuery = true)
+    List<Booking> findCurrentBooking(LocalDateTime date, int bookerId, Pageable page);
 
 }

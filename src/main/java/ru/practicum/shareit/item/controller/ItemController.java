@@ -2,14 +2,20 @@ package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static ru.practicum.shareit.util.Page.getPage;
+
+@Validated
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
@@ -20,7 +26,9 @@ public class ItemController {
     @PostMapping
     public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
                            @Valid @RequestBody ItemCreateDto itemCreateDto) {
+
         itemCreateDto.setOwner(ownerId);
+
         ItemDto addedItem = itemService.addItem(itemCreateDto);
         log.info("Item added: {}", addedItem);
         return addedItem;
@@ -46,21 +54,27 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemPresentDto> getUserItems(@RequestHeader("X-Sharer-User-Id") Integer ownerId) {
-        List<ItemPresentDto> userItems = itemService.getUserItems(ownerId);
+    public List<ItemPresentDto> getUserItems(@RequestHeader("X-Sharer-User-Id") Integer ownerId,
+                                             @Min(0) @RequestParam(value = "from", required = false) Integer from,
+                                             @Min(1) @RequestParam(value = "size", required = false) Integer size) {
+        Pageable page = getPage(from, size);
+        List<ItemPresentDto> userItems = itemService.getUserItems(ownerId, page);
         log.info("User items: {}", userItems);
         return userItems;
     }
 
     @GetMapping("/search")
-    public List<ItemDto> getAvailableItemsByName(@RequestParam String text) {
+    public List<ItemDto> getAvailableItemsByName(@RequestParam String text,
+                                                 @Min(0) @RequestParam(value = "from", required = false) Integer from,
+                                                 @Min(1) @RequestParam(value = "size", required = false) Integer size) {
 
         if (text == null || text.isBlank()) {
             return List.of();
         }
+        Pageable page = getPage(from, size);
 
         String textForSearch = text.toLowerCase();
-        return itemService.getAvailableItemsByName(textForSearch);
+        return itemService.getAvailableItemsByName(textForSearch, page);
     }
 
     @PostMapping("{itemId}/comment")
