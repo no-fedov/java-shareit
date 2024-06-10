@@ -53,18 +53,7 @@ public class RequestServiceImpl implements RequestService {
 
         List<Request> requests = requestRepository.findByRequesterIdOrderByCreatedDesc(userId);
 
-        if (requests == null || requests.isEmpty()) {
-            return List.of();
-        }
-
-        List<Integer> requestIds = requests.stream().map(Request::getId).collect(Collectors.toList());
-
-        List<ItemPresentForRequestDto> ipfr = itemOwnerService.getItemsByRequestIds(requestIds);
-
-        Map<Integer, List<ItemPresentForRequestDto>> items = ipfr.stream()
-                .collect(Collectors.groupingBy(ItemPresentForRequestDto::getRequestId));
-
-        return RequestMapper.mapToRequestDtoWithItemsFromRequest(requests, items);
+        return getRequestDtoWithItems(requests);
     }
 
     @Override
@@ -76,16 +65,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<RequestDtoWithItems> getPageRequest(int userId, Pageable page) {
-        userService.getCurrentUserById(userId);
+
+        getCurrentUser(userId);
 
         List<Request> pageRequest = requestRepository.findByRequesterIdNot(userId, page);
-        List<Integer> requestIds = pageRequest.stream().map(Request::getId).collect(Collectors.toList());
-        List<ItemPresentForRequestDto> ipfr = itemOwnerService.getItemsByRequestIds(requestIds);
 
-        Map<Integer, List<ItemPresentForRequestDto>> items = ipfr.stream()
-                .collect(Collectors.groupingBy(ItemPresentForRequestDto::getRequestId));
-
-        return RequestMapper.mapToRequestDtoWithItemsFromRequest(pageRequest, items);
+        return getRequestDtoWithItems(pageRequest);
     }
 
     private User getCurrentUser(int userId) {
@@ -95,5 +80,23 @@ public class RequestServiceImpl implements RequestService {
     private Request getCurrentRequest(int requestId) {
         return requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundEntityException("Request is not exist"));
+    }
+
+    private List<RequestDtoWithItems> getRequestDtoWithItems(List<Request> requests) {
+
+        if (requests == null || requests.isEmpty()) {
+            return List.of();
+        }
+
+
+        List<Integer> requestIds = requests.stream().map(Request::getId).collect(Collectors.toList());
+
+
+        List<ItemPresentForRequestDto> ipfr = itemOwnerService.getItemsByRequestIds(requestIds);
+
+        Map<Integer, List<ItemPresentForRequestDto>> items = ipfr.stream()
+                .collect(Collectors.groupingBy(ItemPresentForRequestDto::getRequestId));
+
+        return RequestMapper.mapToRequestDtoWithItemsFromRequest(requests, items);
     }
 }
